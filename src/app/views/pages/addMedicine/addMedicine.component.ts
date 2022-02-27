@@ -170,16 +170,15 @@ export class AddMedicineComponent implements OnInit {
 
   }
   paytm(report: any): any {
-    console.log(report);
     let sum = 0;
     this.array.filter((e: any)=> {
       sum += e.price
     })
     const data = {
       amount: sum,
-      name: JSON.parse(localStorage.getItem('user') || '{}').nameOfUser,
-      email: JSON.parse(localStorage.getItem('user') || '{}').email,
-      phone: JSON.parse(localStorage.getItem('user') || '{}').phone
+      name: (JSON.parse(sessionStorage.getItem('user') || '{}').nameOfUser).split(' ')[0],
+      email: JSON.parse(sessionStorage.getItem('user') || '{}').email,
+      phone: JSON.parse(sessionStorage.getItem('user') || '{}').phone
   };
     console.log(data);
     // return
