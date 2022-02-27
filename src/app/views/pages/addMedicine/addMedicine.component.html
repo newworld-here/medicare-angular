@@ -1,0 +1,243 @@
+<div *ngIf="!stateHide" class="bg-light min-vh-100 d-flex flex-row align-items-center">
+  <c-container>
+    <c-row class="justify-content-center">
+      <c-col lg="7" md="9" xl="6">
+        <c-card class="mx-4">
+          <c-card-body class="p-4">
+            <form cForm>
+              <h1>Add Medicine</h1>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilUser"></svg>
+                </span>
+                <input autoComplete="name" cFormControl placeholder="Name" [(ngModel)]="name  " [ngModelOptions]="{standalone: true}"/>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>@</span>
+                <input autoComplete="email" cFormControl placeholder="Price" [(ngModel)]="price" [ngModelOptions]="{standalone: true}"/>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input autoComplete="Saller" cFormControl placeholder="Saller" type="text" [(ngModel)]="seller" [ngModelOptions]="{standalone: true}"/>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <textarea autoComplete="Product-Description" cFormControl placeholder="Product Description" type="text" [(ngModel)]="product_desc" [ngModelOptions]="{standalone: true}" cols="30" rows="10"></textarea>
+              </c-input-group>
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input autoComplete="Offers" cFormControl placeholder="Offers" type="number" [(ngModel)]="offers" [ngModelOptions]="{standalone: true}"/>
+              </c-input-group>
+              <c-input-group class="mb-4">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input autoComplete="Current-Price" cFormControl placeholder="Current Price" type="number" [(ngModel)]="current_price" [ngModelOptions]="{standalone: true}"/>
+              </c-input-group>
+              <div class="row">
+                <div class="d-grid">
+                  <button (click)="add()" cButton color="success">Create</button>
+                </div>
+                <div class="d-grid">
+                  <button (click)="close()" cButton color="danger">Close</button>
+                </div>
+              </div>
+            </form>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-container>
+</div>
+
+<div *ngIf="stateHide">
+  <div class="tabl-box group-box-bgcolor" *ngIf="role === 'admin'">
+    <div class="row">
+      <div class="col-md-3">
+        <h5 class="group-box-header-text-color">Medicine List</h5>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="tabl-search">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <button (click)="med()" cButton color="success">Add</button>
+      </div>
+    </div>
+
+    <table id="tblCustomers" mat-table [dataSource]="data" matSort class="mat-elevation-z8">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="slno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sl No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.slno}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name Of Medicine </th>
+        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="seller">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Saller </th>
+        <td mat-cell *matCellDef="let element"> {{element.seller}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="product_desc">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Desc </th>
+        <td mat-cell *matCellDef="let element"> {{element.product_desc}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="offers">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Offers </th>
+        <td mat-cell *matCellDef="let element"> {{element.offers}}
+          <!-- <div *ngIf=" element.faultActiveStatus =='1'" class="status-active">
+            <span>Active</span>
+          </div>
+          <div *ngIf=" element.faultActiveStatus =='0'" class="status-inactive">
+            <span>Inactive</span>
+          </div> -->
+          <!-- <a title="Active" class="icon-tooltips" *ngIf=" element.faultActiveStatus =='1'" (click)="deleteModalOpen(element, deleteModal , 0)">
+            <mat-icon class="active-icon">check_circle_outline</mat-icon>
+          </a>
+          <a title="Inactive" class="icon-tooltips" *ngIf=" element.faultActiveStatus =='0'" (click)="deleteModalOpen(element, deleteModal , 1)">
+            <mat-icon class="inactive-icon">error_outline</mat-icon>
+          </a> -->
+          <!-- <ng-template #other_content class="status-inactive"><span>Inactive</span></ng-template> -->
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="action-icons">
+            <a title="Remove" class="icon-tooltips" *ngIf="element.flag === 1">
+              <mat-icon class="edit-icon delete" (click)="edit(element,0)">delete</mat-icon>
+            </a>
+            <a title="Active" class="icon-tooltips" *ngIf="element.flag === 0">
+              <mat-icon class="edit-icon" (click)="edit(element,1)">check</mat-icon>
+            </a>
+            <a title="Active" class="icon-tooltips">
+              <mat-icon class="edit-icon" (click)="update(element)">edit</mat-icon>
+            </a>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header table-header-bgcolor"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[20, 30, 40 ,60, 80 , 100 ,120 ,150]" showFirstLastButtons></mat-paginator>
+  </div>
+
+  <div class="tabl-box group-box-bgcolor" *ngIf="role === 'user'">
+    <div class="row">
+      <div class="col-md-3">
+        <h5 class="group-box-header-text-color">Medicine List</h5>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="tabl-search">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3" (click)="paytm(1)" style="cursor: pointer;">
+        <i class="fa" style="font-size:24px">&#xf07a;</i>
+        <span class='badge badge-warning' id='lblCartCount'> {{array.length}} </span>
+      </div>
+    </div>
+
+    <table id="tblCustomers" mat-table [dataSource]="data" matSort class="mat-elevation-z8">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="slno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sl No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.slno}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name Of Medicine </th>
+        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="seller">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Saller </th>
+        <td mat-cell *matCellDef="let element"> {{element.seller}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="product_desc">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Desc </th>
+        <td mat-cell *matCellDef="let element"> {{element.product_desc}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="offers">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Offers </th>
+        <td mat-cell *matCellDef="let element"> {{element.offers}}
+          <!-- <div *ngIf=" element.faultActiveStatus =='1'" class="status-active">
+            <span>Active</span>
+          </div>
+          <div *ngIf=" element.faultActiveStatus =='0'" class="status-inactive">
+            <span>Inactive</span>
+          </div> -->
+          <!-- <a title="Active" class="icon-tooltips" *ngIf=" element.faultActiveStatus =='1'" (click)="deleteModalOpen(element, deleteModal , 0)">
+            <mat-icon class="active-icon">check_circle_outline</mat-icon>
+          </a>
+          <a title="Inactive" class="icon-tooltips" *ngIf=" element.faultActiveStatus =='0'" (click)="deleteModalOpen(element, deleteModal , 1)">
+            <mat-icon class="inactive-icon">error_outline</mat-icon>
+          </a> -->
+          <!-- <ng-template #other_content class="status-inactive"><span>Inactive</span></ng-template> -->
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="action-icons">
+            <a title="Remove" class="icon-tooltips">
+              <mat-icon class="edit-icon delete" (click)="push(element)">add</mat-icon>
+            </a>
+            <a title="Active" class="icon-tooltips">
+              <mat-icon class="edit-icon" (click)="splice(element)">remove</mat-icon>
+            </a>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header table-header-bgcolor"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[20, 30, 40 ,60, 80 , 100 ,120 ,150]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
+<form action="{{formurl}}" name="f1" target="_blank" method="post">
+  <div id="checksumArea">
+  </div>
+</form>
